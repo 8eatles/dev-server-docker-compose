@@ -1,0 +1,27 @@
+version: "3.4"
+
+services:
+  registry:
+    container_name: docker-registry
+    image: registry:2.7.1
+    ports:
+      - ${REGISTRY_PORT}:3000
+  nginx:
+    container_name: nginx-proxy
+    image: nginx:1.17.10
+    ports:
+      - ${NGINX_HTTP_PORT}:80
+      - ${NGINX_HTTPS_PORT}:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:2.60.3
+    ports:
+      - ${JENKINS_HTTP_PORT}:8080
+      - ${JENKINS_JAVA_API_PORT}:50000gi
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.0.0
+    ports:
+      - ${PHPMYADMIN_PORT}:80
