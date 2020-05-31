@@ -4,8 +4,8 @@ services:
   registry:
     container_name: docker-registry
     image: registry:2.7.1
-    ports:
-      - ${REGISTRY_PORT}:3000
+#    ports:
+#      - ${REGISTRY_PORT}:5000
   nginx:
     container_name: nginx-proxy
     image: nginx:1.17.10
@@ -13,15 +13,26 @@ services:
       - ${NGINX_HTTP_PORT}:80
       - ${NGINX_HTTPS_PORT}:443
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/log/nginx:/var/log/nginx
+#  certbot:
+#    container_name: certbot
+#    image: certbot/certbot
+#    volumes:
+#      - ./nginx/sites-enabled:/var/www/certbot
+#      - ./nginx/certs-enabled:/etc/letsencrypt
   jenkins:
     container_name: jenkins
     image: jenkins/jenkins:2.60.3
-    ports:
-      - ${JENKINS_HTTP_PORT}:8080
-      - ${JENKINS_JAVA_API_PORT}:50000gi
+    user: root
+#    ports:
+#      - ${JENKINS_HTTP_PORT}:8080
+#      - ${JENKINS_JAVA_API_PORT}:50000
+    volumes:
+      - /backup/jenkins:/var/jenkins_home
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin:5.0.0
-    ports:
-      - ${PHPMYADMIN_PORT}:80
+#    ports:
+#      - ${PHPMYADMIN_PORT}:80
